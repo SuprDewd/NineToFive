@@ -133,3 +133,6 @@ TODO
 
 - Support multiple event logs in a clean way.
 
+- Timestamps in the event log should have a timezone, so that commands like
+  `work merge` work correctly on logs from multiple machines.
+
