@@ -5,6 +5,7 @@
 # Automake
 Makefile.in
 Makefile
+.deps
 
 # Autoconf
 /autom4te.cache
