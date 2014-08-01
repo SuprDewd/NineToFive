@@ -110,7 +110,8 @@ $ work start && (CMD || true) && work stop
 
 ### Examples
 ```
-work while bash    # Run a bash shell where I do my work
+work while bash        # Run a bash shell where I do my work
+work while "sleep 60"  # An alternative way to work for 1 minute
 ```
 
 work merge
