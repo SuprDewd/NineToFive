@@ -9,6 +9,7 @@ which helps you log your activity while you work.
 Installation
 ------------
 ```
+$ ./autogen.sh
 $ ./configure
 $ make
 # make install
