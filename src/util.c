@@ -11,7 +11,17 @@ int xstrncpy(char *dest, const char *src, size_t destsize) {
         return -1;
 
     strcpy(dest, src);
-    return 0;
+    return srclen;
+}
+
+int xstrncat(char *dest, const char *src, size_t destsize) {
+    int destlen = strlen(dest);
+    int srclen = strlen(src);
+    if (srclen + destlen + 1 > destsize)
+        return -1;
+
+    strcpy(dest + destlen, src);
+    return destlen + srclen;
 }
 
 void fatal(char *format, ...) {

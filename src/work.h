@@ -3,7 +3,7 @@
 
 /* Global options */
 struct global_options {
-    char log[256];
+    char log_name[256];
 } global_options;
 
 #define WORK_GLOBAL_OPTIONS \

@@ -4,20 +4,13 @@
 #include "work-stop.h"
 #include "work-help.h"
 #include "util.h"
+#include "logging.h"
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <getopt.h>
 #include <time.h>
 #include <string.h>
-
-void get_now_utc_str(char *out) {
-    time_t now_epoch;
-    struct tm now_utc;
-    time(&now_epoch);
-    gmtime_r(&now_epoch, &now_utc);
-    asctime_r(&now_utc, out);
-}
 
 static void version(void) {
     printf("%s version %s\n", PACKAGE_NAME, PACKAGE_VERSION);
@@ -50,8 +43,15 @@ void process_global_options(int c) {
             usage();
             exit(0);
         case 'l':
-            if (xstrncpy(global_options.log, optarg, sizeof(global_options.log)) == -1)
+
+            if (xstrncpy(global_options.log_name, optarg, sizeof(global_options.log_name)) == -1) {
                 fatal("log name too long: '%s'", optarg);
+            }
+
+            if (!valid_log_name(global_options.log_name)) {
+                fatal("log name invalid");
+            }
+
             break;
         case 'V':
             version();
@@ -63,7 +63,7 @@ void process_global_options(int c) {
 
 static struct {
     char *name;
-    int (*init)(struct global_options, int, char*[]);
+    int (*init)(struct global_options*, int, char*[]);
 } subcommands[] = {
     {"start", sub_start},
     {"stop",  sub_stop},
@@ -75,7 +75,7 @@ static int dispatch(const char *name, int argc, char *argv[]) {
     int i;
     for (i = 0; subcommands[i].name; i++) {
         if (strcmp(name, subcommands[i].name) == 0) {
-            return subcommands[i].init(global_options, argc, argv);
+            return subcommands[i].init(&global_options, argc, argv);
         }
     }
 
@@ -85,7 +85,7 @@ static int dispatch(const char *name, int argc, char *argv[]) {
 void main(int argc, char *argv[]) {
 
     /* Default options */
-    strcpy(global_options.log, "main");
+    strcpy(global_options.log_name, "main");
 
     /* Parse command line arguments */
     while (1) {

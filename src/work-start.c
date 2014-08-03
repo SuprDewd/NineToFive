@@ -1,6 +1,7 @@
 #include "work-start.h"
 #include "work.h"
 #include "util.h"
+#include "logging.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -15,7 +16,7 @@ static struct option long_options[] = {
     {0, 0, 0, 0}
 };
 
-int sub_start(struct global_options g, int argc, char *argv[]) {
+int sub_start(struct global_options *g, int argc, char *argv[]) {
 
     /* Parse command-line arguments */
     while (1) {
@@ -36,6 +37,8 @@ int sub_start(struct global_options g, int argc, char *argv[]) {
                 fatal("got invalid character code %d while parsing arguments", c);
         }
     }
+
+    log_event(g->log_name, "start");
 
     return 0;
 }

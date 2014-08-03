@@ -3,6 +3,6 @@
 
 #include "work.h"
 
-int sub_stop(struct global_options g, int argc, char *argv[]);
+int sub_stop(struct global_options *g, int argc, char *argv[]);
 
 #endif
