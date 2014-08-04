@@ -47,6 +47,8 @@ int sub_start(struct global_options *g, int argc, char *argv[]) {
                     fatal("parameter to start is too long");
                 }
 
+                found_tspec = 1;
+
                 break;
             case '?':
                 exit(1);
@@ -55,9 +57,15 @@ int sub_start(struct global_options *g, int argc, char *argv[]) {
         }
     }
 
-    time_t time = resolve_timespec(get_now(), tspec);
-    if (time == TIMESPEC_INVALID) {
-        fatal("time specification '%s' is invalid", tspec);
+    time_t time;
+
+    if (found_tspec) {
+        time = resolve_timespec(get_now(), tspec);
+        if (time == TIMESPEC_INVALID) {
+            fatal("time specification '%s' is invalid", tspec);
+        }
+    } else {
+        time = get_now();
     }
 
     log_event(g->log_name, time, "start");
