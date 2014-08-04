@@ -24,6 +24,7 @@ Makefile
 
 # Binaries
 src/work
+tests/check_timespec
 
 # Trash
 *~
