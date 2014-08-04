@@ -38,7 +38,7 @@ int sub_stop(struct global_options *g, int argc, char *argv[]) {
         }
     }
 
-    log_event(g->log_name, "stop");
+    log_event_now(g->log_name, "stop");
 
     return 0;
 }

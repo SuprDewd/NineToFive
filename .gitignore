@@ -6,6 +6,7 @@
 Makefile.in
 Makefile
 .deps
+/test-driver
 
 # Autoconf
 /autom4te.cache
@@ -27,4 +28,7 @@ src/work
 # Trash
 *~
 *.swp
+*.log
+*.trs
+.dirstamp
 

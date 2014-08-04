@@ -113,16 +113,22 @@ static FILE *open_log_file(const char *log_name, const char *mode) {
     return f;
 }
 
-void log_event(const char *log_name, const char *event) {
+void log_event(const char *log_name, time_t time, const char *event) {
     ensure_log_file_exists(log_name);
 
-    char *now = get_now_utc_str();
     FILE *log = open_log_file(log_name, "a");
 
-    if (fprintf(log, "%s %s\n", now, event) < 0) {
+    char *time_str = to_utc_str(time);
+
+    if (fprintf(log, "%s %s\n", time_str, event) < 0) {
         fatal("could not write to log file: %s", strerror(errno));
     }
 
     fclose(log);
+    free(time_str);
+}
+
+void log_event_now(const char *log_name, const char *event) {
+    log_event(log_name, get_now(), event);
 }
 
