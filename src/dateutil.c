@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+static const char *utc_str_format = "%Y-%m-%dT%H:%M:%SZ";
+
 char *to_utc_str(time_t t) {
     struct tm utc;
     gmtime_r(&t, &utc);
@@ -11,9 +13,19 @@ char *to_utc_str(time_t t) {
     char *out = malloc((64 + 1) * sizeof(char));
 
     /* http://en.wikipedia.org/wiki/ISO_8601 */
-    strftime(out, 64, "%Y-%m-%dT%H:%M:%SZ", &utc);
+    strftime(out, 64, utc_str_format, &utc);
 
     return out;
+}
+
+time_t from_utc_str(const char *s) {
+    struct tm utc;
+
+    memset(&utc, 0, sizeof(struct tm));
+    strptime(s, utc_str_format, &utc);
+
+    // TODO: mktime is localtime, but we always want UTC
+    return mktime(&utc);
 }
 
 time_t get_now(void) {

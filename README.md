@@ -35,6 +35,10 @@ work stop
 The `work stop` command appends a **stop** event to the event log with the
 current time as a timestamp.
 
+work status
+-----------
+The `work status` command prints the current status of the event log.
+
 work since
 ----------
 The `work since TIME` command appends a **start** event to the event log with a

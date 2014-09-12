@@ -2,6 +2,7 @@
 #include "work.h"
 #include "work-start.h"
 #include "work-stop.h"
+#include "work-status.h"
 #include "work-help.h"
 #include "util.h"
 #include "logging.h"
@@ -65,9 +66,10 @@ static struct {
     char *name;
     int (*init)(struct global_options*, int, char*[]);
 } subcommands[] = {
-    {"start", sub_start},
-    {"stop",  sub_stop},
-    {"help",  sub_help},
+    {"start",  sub_start},
+    {"stop",   sub_stop},
+    {"status", sub_status},
+    {"help",   sub_help},
     {0, 0}
 };
 

@@ -11,7 +11,6 @@
 #include <sys/types.h>
 #include <errno.h>
 #include <fcntl.h>
-#include <stdio.h>
 
 static char *get_log_dir(void) {
     struct passwd *pw = getpwuid(getuid());
@@ -101,7 +100,7 @@ int valid_log_name(const char *log_name) {
     return 1;
 }
 
-static FILE *open_log_file(const char *log_name, const char *mode) {
+FILE *open_log_file(const char *log_name, const char *mode) {
     char *path = get_log_file(log_name);
     FILE *f = fopen(path, mode);
 
