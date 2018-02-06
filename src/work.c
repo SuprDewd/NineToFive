@@ -3,6 +3,7 @@
 #include "work-start.h"
 #include "work-stop.h"
 #include "work-status.h"
+#include "work-working.h"
 #include "work-help.h"
 #include "util.h"
 #include "logging.h"
@@ -24,6 +25,8 @@ static void usage(void) {
     puts("\thelp\t\tShow help for a given command or a help overview");
     puts("\tstart\t\tLog a start event");
     puts("\tstop\t\tLog a stop event");
+    puts("\tstatus\t\tGet current status");
+    puts("\tworking\t\tCheck if currently working");
     puts("");
     puts("Global options:");
     puts("\t-h --help\t\tDisplay this help and exit");
@@ -66,10 +69,11 @@ static struct {
     char *name;
     int (*init)(struct global_options*, int, char*[]);
 } subcommands[] = {
-    {"start",  sub_start},
-    {"stop",   sub_stop},
-    {"status", sub_status},
-    {"help",   sub_help},
+    {"start",   sub_start},
+    {"stop",    sub_stop},
+    {"status",  sub_status},
+    {"working", sub_working},
+    {"help",    sub_help},
     {0, 0}
 };
 

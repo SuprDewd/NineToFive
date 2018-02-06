@@ -39,6 +39,11 @@ work status
 -----------
 The `work status` command prints the current status of the event log.
 
+work working
+-----------
+The `work working` command returns 0 if work is in progress according to the
+event log, and 1 otherwise.
+
 work since
 ----------
 The `work since TIME` command appends a **start** event to the event log with a

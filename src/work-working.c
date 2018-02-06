@@ -1,4 +1,4 @@
-#include "work-status.h"
+#include "work-working.h"
 #include "work.h"
 #include "util.h"
 #include "dateutil.h"
@@ -20,7 +20,7 @@ static struct option long_options[] = {
     {0, 0, 0, 0}
 };
 
-int sub_status(struct global_options *g, int argc, char *argv[]) {
+int sub_working(struct global_options *g, int argc, char *argv[]) {
 
     /* Parse command-line arguments */
     while (1) {
@@ -44,20 +44,9 @@ int sub_status(struct global_options *g, int argc, char *argv[]) {
     }
 
     struct status *st = get_log_status(g->log_name);
-
-    printf("current status: ");
-    if (st->working) {
-        printf("working\n");
-    } else {
-        printf("not working\n");
-    }
-
-    printf("hours so far: ");
-
-    int s = st->total_seconds;
-    printf("%02d:%02d:%02d\n", s / 60 / 60, (s / 60) % 60, s % 60);
+    int working = st->working;
 
     free(st);
-    return 0;
+    return !working;
 }
 
