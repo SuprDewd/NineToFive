@@ -4,6 +4,7 @@
 #include "dateutil.h"
 #include "logging.h"
 #include "timespec.h"
+#include "status.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -67,6 +68,10 @@ int sub_start(struct global_options *g, int argc, char *argv[]) {
     } else {
         time = get_now();
     }
+
+    struct status *st = get_log_status(g->log_name);
+    if (st->working) fatal("current status is 'working'");
+    free(st);
 
     log_event(g->log_name, time, "start");
 

@@ -4,6 +4,7 @@
 #include "work-stop.h"
 #include "work-status.h"
 #include "work-working.h"
+#include "work-invoice.h"
 #include "work-help.h"
 #include "util.h"
 #include "logging.h"
@@ -27,6 +28,7 @@ static void usage(void) {
     puts("\tstop\t\tLog a stop event");
     puts("\tstatus\t\tGet current status");
     puts("\tworking\t\tCheck if currently working");
+    puts("\tinvoice\t\tMake an invoice");
     puts("");
     puts("Global options:");
     puts("\t-h --help\t\tDisplay this help and exit");
@@ -73,6 +75,7 @@ static struct {
     {"stop",    sub_stop},
     {"status",  sub_status},
     {"working", sub_working},
+    {"invoice", sub_invoice},
     {"help",    sub_help},
     {0, 0}
 };

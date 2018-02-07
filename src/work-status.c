@@ -52,10 +52,14 @@ int sub_status(struct global_options *g, int argc, char *argv[]) {
         printf("not working\n");
     }
 
-    printf("hours so far: ");
+    if (st->last_invoice != 0) {
+	    char *utc_str = to_utc_str(st->last_invoice);
+	    printf("last invoice: %s\n", utc_str);
+	    free(utc_str);
+    }
 
     int s = st->total_seconds;
-    printf("%02d:%02d:%02d\n", s / 60 / 60, (s / 60) % 60, s % 60);
+    printf("uninvoiced: %02d:%02d:%02d\n", s / 60 / 60, (s / 60) % 60, s % 60);
 
     free(st);
     return 0;
