@@ -50,7 +50,7 @@ int sub_invoice(struct global_options *g, int argc, char *argv[]) {
 
     struct status *st = get_log_status(g->log_name);
     int working = st->working,
-	s = st->total_seconds;
+	s = st->current_seconds;
     free(st);
 
     if (working) log_event(g->log_name, time, "stop");
