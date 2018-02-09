@@ -5,6 +5,7 @@
 
 struct status {
 	int total_seconds;   // Total number of seconds of work
+	int current_seconds; // Number of seconds of work since last invoice
 	int working;         // Whether work is currently in progress
 	time_t last_invoice; // Time of last invoice
 };

@@ -17,7 +17,7 @@ struct status* get_log_status(char log_name[256]) {
     // TODO: don't assume that the log file is sorted by time, we should
     // explicitly sort before processing
 
-    int last = 0, sum = 0, working = 0;
+    int last = 0, sum = 0, total_sum = 0, working = 0;
     time_t last_invoice = 0;
     while (fgets(linebuf, sizeof(linebuf), log)) {
         time_t at = from_utc_str(linebuf);
@@ -28,6 +28,7 @@ struct status* get_log_status(char log_name[256]) {
             working = 1;
         } else if (strstr(linebuf, "stop")) {
             sum += at - last;
+            total_sum += at - last;
             last = at;
             working = 0;
         } else if (strstr(linebuf, "invoice")) {
@@ -43,10 +44,12 @@ struct status* get_log_status(char log_name[256]) {
 
     if (working) {
 	    sum += get_now() - last;
+	    total_sum += get_now() - last;
     }
 
     struct status* res = (struct status*)malloc(sizeof(*res));
-    res->total_seconds = sum;
+    res->total_seconds = total_sum;
+    res->current_seconds = sum;
     res->working = working;
     res->last_invoice = last_invoice;
 
