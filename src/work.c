@@ -15,6 +15,9 @@
 #include <time.h>
 #include <string.h>
 
+#define MAX(a,b) ((a)>(b)?(a):(b))
+#define MIN(a,b) ((a)<(b)?(a):(b))
+
 static void version(void) {
     printf("%s version %s\n", PACKAGE_NAME, PACKAGE_VERSION);
 }
@@ -80,6 +83,77 @@ static struct {
     {0, 0}
 };
 
+struct index_list {
+	int index;
+	struct index_list *next;
+};
+
+static void similar_commands(const char *name) {
+	struct index_list *best = NULL,
+	                  *tail = NULL;
+	int best_dist = -1,
+	    namelen = strlen(name),
+	    maxlen = 0,
+	    t, i, j;
+	for (t = 0; subcommands[t].name; t++) {
+		maxlen = MAX(maxlen, strlen(subcommands[t].name));
+	}
+
+	int **dist = (int**)calloc(namelen+1, sizeof(int*));
+	for (i = 0; i <= namelen; i++) {
+		dist[i] = (int*)calloc(maxlen+1, sizeof(int));
+	}
+
+	for (t = 0; subcommands[t].name; t++) {
+		int curlen = strlen(subcommands[t].name);
+		for (i = 0; i <= namelen; i++) {
+			for (j = 0; j <= curlen; j++) {
+				if (i == 0 || j == 0) {
+					dist[i][j] = MAX(i,j);
+				} else {
+					dist[i][j] = (name[i-1] == subcommands[t].name[j-1] ? 0 : 1) + dist[i-1][j-1];
+					dist[i][j] = MIN(dist[i][j], 1 + dist[i][j-1]);
+					dist[i][j] = MIN(dist[i][j], 1 + dist[i-1][j]);
+				}
+			}
+		}
+
+		int cur_dist = dist[namelen][curlen];
+		if (cur_dist < best_dist || best_dist == -1) {
+			best_dist = cur_dist;
+			while (best) {
+				tail = best;
+				best = best->next;
+				free(tail);
+			}
+			tail = NULL;
+		}
+		if (cur_dist == best_dist) {
+			struct index_list* add = (struct index_list*)malloc(sizeof(struct index_list));
+			add->index = t;
+			add->next = NULL;
+
+			if (tail) {
+				tail->next = add;
+			} else {
+				best = add;
+			}
+			tail = add;
+		}
+	}
+
+	for (i = 0; i <= namelen; i++) free(dist[i]);
+	free(dist);
+
+	fprintf(stderr, "\nThe most similar commands are\n");
+	while (best) {
+		fprintf(stderr, "        %s\n", subcommands[best->index].name);
+		tail = best;
+		best = best->next;
+		free(tail);
+	}
+}
+
 static int dispatch(const char *name, int argc, char *argv[]) {
     int i;
     for (i = 0; subcommands[i].name; i++) {
@@ -88,7 +162,9 @@ static int dispatch(const char *name, int argc, char *argv[]) {
         }
     }
 
-    fatal("'%s' is not a valid subcommand", name);
+    fprintf(stderr, "'%s' is not a valid subcommand\n", name);
+    similar_commands(name);
+    exit(1);
 }
 
 void main(int argc, char *argv[]) {
